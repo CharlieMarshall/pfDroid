@@ -15,7 +15,7 @@
         android:id="@+id/hostname"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:inputType="textNoSuggestions" />
+        android:inputType="textWebEmailAddress" />
 
     <Button
         android:id="@+id/lookup"
