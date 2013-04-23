@@ -127,7 +127,9 @@ public class SubIndexActivity extends ListActivity {
 				}
 				else if(sd.getHeader().equals("Diagnostics"))
 				{ 
-					if (sd.getTitle(position).equals("DNS Lookup"))
+					if (sd.getTitle(position).equals("ARP Table"))
+						i = new Intent(SubIndexActivity.this, ArpActivity.class);
+					else if (sd.getTitle(position).equals("DNS Lookup"))
 						i = new Intent(SubIndexActivity.this, DnsActivity.class);
 					else if (sd.getTitle(position).equals("Factory Defaults"))
 					{

@@ -75,7 +75,7 @@ public class ServicesActivity extends CustomActivity
 				
 				Services s = servicesStore.get(position);
 			
-				Intent i = new Intent(ServicesActivity.this, ServiceActivity.class);
+				Intent i = new Intent(ServicesActivity.this, ViewServiceActivity.class);
 				// Now add the parameters to the Intent
 				i.putExtra("subDrop", subDrop);
 				i.putExtra("menu", menu);

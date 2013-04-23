@@ -77,11 +77,17 @@
             android:name="charlie.marshall.pfsense.ServicesActivity"
             android:label="Services" />
         <activity
-            android:name="charlie.marshall.pfsense.ServiceActivity"
+            android:name="charlie.marshall.pfsense.ViewServiceActivity"
             android:label="Service" />
         <activity
             android:name="charlie.marshall.pfsense.TracerouteActivity"
             android:label="Traceroute" />
+        <activity
+            android:name="charlie.marshall.pfsense.ArpActivity"
+            android:label="Arp Table" />
+        <activity
+            android:name="charlie.marshall.pfsense.ViewArpActivity"
+            android:label="View Arp entry" />
         
     </application>
 
