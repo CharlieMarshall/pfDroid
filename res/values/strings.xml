@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">pfSense androidGUI</string>
+    <string name="action_settings">Settings</string>
+    <string name="hello_world">Hello world!</string>
+
+    <string-array name="protocols">
+        <item name="0">HTTPS</item>
+        <item name="1">HTTP</item>
+    </string-array>
+    <string-array name="protocolValues">
+        <item name="0">HTTPS</item>
+        <item name="1">HTTP</item>
+    </string-array>
+
+</resources>

@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/layout"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical" >
+
+    <TextView
+        android:id="@+id/hostLabel"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="Host" />
+
+    <EditText
+        android:id="@+id/host"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:inputType="textNoSuggestions" />
+
+    <TextView
+        android:id="@+id/hopsLabel"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="Interface" />
+
+    <Spinner
+        android:id="@+id/hopsSpinner"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content" />
+    
+    <CheckBox
+        android:id="@+id/icmp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Use ICMP" />
+         
+      <Button
+        android:id="@+id/traceroute"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:onClick="onClick"
+        android:text="Traceroute" />
+      
+      <TextView
+        android:id="@+id/tracerouteResult"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="" />
+
+</LinearLayout>

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/layout"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical" >
+
+    <TextView
+        android:id="@+id/interfaceAlias"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="Interface:" />
+    
+    <Spinner
+        android:id="@+id/spinner"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content" />
+
+    <TextView
+        android:id="@+id/mac"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="MAC address:" />
+    
+    <EditText
+        android:id="@+id/macAddress"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:inputType="textNoSuggestions"
+        android:hint="xx:xx:xx:xx:xx:xx" />
+
+</LinearLayout>

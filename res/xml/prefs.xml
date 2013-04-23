@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <PreferenceCategory
+        android:key="login_credentials"
+        android:title="login credentials" >
+        <EditTextPreference
+            android:inputType="textNoSuggestions"
+            android:key="username"
+            android:summary="webConfigurator username"
+            android:title="username" />
+        <EditTextPreference
+            android:inputType="textPassword"
+            android:key="password"
+            android:summary="webConfigurator password"
+            android:title="password" />
+    </PreferenceCategory>
+    <PreferenceCategory
+        android:key="webConfsettings"
+        android:title="webConfigurator settings" >
+        <EditTextPreference
+            android:inputType="textNoSuggestions"
+            android:key="domain"
+            android:summary="your domain ie pfsense.localdomain"
+            android:title="domain" />
+        <ListPreference
+            android:entries="@array/protocols"
+            android:entryValues="@array/protocolValues"
+            android:key="protocol"
+            android:summary="webConfigurator protocol"
+            android:title="protocol" 
+            android:defaultValue="HTTPS"/>
+        
+        <EditTextPreference
+            android:inputType="number"
+            android:key="port"
+            android:summary="webConfigurator port number"
+            android:title="port"
+            android:defaultValue="443" />
+    </PreferenceCategory>
+
+</PreferenceScreen>

@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/linear"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical" >
+            
+    <TextView
+        android:id="@+id/interfaceAlias"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="Interface:" />
+    
+    <CheckBox
+        android:id="@+id/enableInterface"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Enable Interface" />
+    
+    <TextView
+        android:id="@+id/typeLabel"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="Type" />
+    
+    <Spinner
+        android:id="@+id/type"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content" />
+
+    <TextView
+        android:id="@+id/mac"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="MAC address" />
+    
+     <EditText
+        android:id="@+id/macAddress"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:inputType="textNoSuggestions" />
+     
+      <TextView
+        android:id="@+id/mtuLabel"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="MTU" />
+    
+     <EditText
+        android:id="@+id/mtu"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:inputType="textNoSuggestions" />
+     
+      <TextView
+        android:id="@+id/msslabel"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="MSS" />
+    
+     <EditText
+        android:id="@+id/mss"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:inputType="textNoSuggestions" />
+
+     <TextView
+        android:id="@+id/speedLabel"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="Speed and Duplex" />
+    
+    <Spinner
+        android:id="@+id/speed"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content" />
+</LinearLayout>
