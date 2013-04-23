@@ -21,9 +21,6 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
-// TODO check MAC addresses are correctly formatted
-// TODO check descriptions are not empty - we cant have an empty client
-
 public class ArpActivity extends ListActivity
 {
 	private Pfsense pf;
@@ -91,7 +88,7 @@ public class ArpActivity extends ListActivity
 		protected void onPreExecute() {
 			try {
 				dialogT = new ProgressDialog(ArpActivity.this);
-				dialogT.setMessage("Performing task...");
+				dialogT.setMessage("Retrieving Arp Table...");
 				dialogT.setIndeterminate(true);
 				dialogT.setCancelable(false);
 				dialogT.show();
@@ -136,7 +133,6 @@ public class ArpActivity extends ListActivity
 			dialogT.dismiss();
 		}
 
-
 	} // end of PfArp subclass
 
 
@@ -145,7 +141,6 @@ public class ArpActivity extends ListActivity
 	 * 
 	 * Saves each table row into an Arp class
 	 * Saves each ARP in an ArrayList arpStore
-	 * 
 	 * 
 	 */
 

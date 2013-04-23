@@ -4,20 +4,15 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.widget.TextView;
 
-// TODO check MAC addresses are correctly formatted
-// TODO check descriptions are not empty - we cant have an empty client
-
 public class ViewArpActivity extends CustomActivity
 {
-	private Arp arp;
-
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_view_arp);
 
 		Intent i = getIntent();
-		arp = (Arp)i.getSerializableExtra("arp");
+		Arp arp = (Arp)i.getSerializableExtra("arp");
 		draw(arp);
 	}
 
