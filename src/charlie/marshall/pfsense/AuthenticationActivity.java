@@ -67,7 +67,7 @@ public class AuthenticationActivity extends CustomActivity
 	{	
 		EditText username = (EditText) findViewById(R.id.username);
 		EditText password = (EditText) findViewById(R.id.password);
-		
+
 		Spinner serverSpinner = (Spinner) findViewById(R.id.spinnerServer);  
 		String server = serverSpinner.getSelectedItem().toString();
 
@@ -198,7 +198,7 @@ public class AuthenticationActivity extends CustomActivity
 					HttpsMethods methods = new HttpsMethods(pf.getHttpsCookieStore());
 					page = methods.getPingResultsPage(new URL(pf.getPfURL() + sd.getURL(subDrop)), args[0]);
 				}
-				
+
 				return page;
 
 			} catch (Exception e) {
@@ -264,10 +264,10 @@ public class AuthenticationActivity extends CustomActivity
 
 		// get returned message
 		Element output = doc.select("table.infobox").first();
-		
+
 		if(output == null) // if unsuccessful get error message
 			output = doc.select("div#inputerrorsdiv").first();
-		
+
 		return output.text();
 	}
 

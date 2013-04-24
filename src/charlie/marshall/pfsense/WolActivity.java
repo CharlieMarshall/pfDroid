@@ -12,6 +12,7 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -27,12 +28,11 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.AdapterContextMenuInfo;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Spinner;
-
-// TODO check MAC addresses are correctly formatted
-// TODO check descriptions are not empty - we cant have an empty client
+import android.widget.Toast;
 
 public class WolActivity extends CustomActivity
 {
@@ -60,14 +60,13 @@ public class WolActivity extends CustomActivity
 
 		// scrape the page for clients
 		new PfWol().execute(sd.getURL(subDrop));
-		
 	}
 
 	/* 
 	 * Create context menu for long clicks
 	 *
 	 */
-	
+
 	@Override
 	public void onCreateContextMenu(ContextMenu menu, View v, ContextMenuInfo menuInfo) {
 		super.onCreateContextMenu(menu, v, menuInfo);
@@ -98,38 +97,6 @@ public class WolActivity extends CustomActivity
 		}
 	}
 
-	public void sendMagicPacket(int position){
-		new PfWol().execute(sd.getURL(subDrop) + "?mac=" + wolStore.get(position).getMac() + "&if=" + wolStore.get(position).getInterfaceName());
-	}
-
-
-	/*
-	 * AlertDialog to confirm delete host 
-	 * 
-	 * Ok = run Async task to delete hots
-	 * Cancel = do nothing
-	 */
-
-	public void confirmDelete() {
-
-		AlertDialog dialog = new AlertDialog.Builder(this)
-		//.setIcon(android.R.drawable.ic_dialog_alert)
-		.setTitle("Confirm delete?")
-		.setMessage("Do you really want to delete this entry?")
-		.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-			public void onClick(DialogInterface dialog, int which) {
-				dialog.dismiss();	
-				new PfWol().execute(sd.getURL(subDrop) + "?act=del&id=" + wolPos);
-			}
-		})
-		.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-			public void onClick(DialogInterface dialog, int which) {
-				dialog.dismiss();
-			}
-		})
-		.create();
-		dialog.show();
-	}
 
 	/*
 	 * Method to populate and draw the ListView
@@ -175,11 +142,43 @@ public class WolActivity extends CustomActivity
 		}
 	}
 
+
+	/*
+	 * AlertDialog to confirm delete host 
+	 * 
+	 * Ok = run Async task to delete hots
+	 * Cancel = do nothing
+	 */
+
+	public void confirmDelete() {
+
+		AlertDialog dialog = new AlertDialog.Builder(this)
+		//.setIcon(android.R.drawable.ic_dialog_alert)
+		.setTitle("Confirm delete?")
+		.setMessage("Do you really want to delete this entry?")
+		.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog, int which) {
+				dialog.dismiss();	
+				new PfWol().execute(sd.getURL(subDrop) + "?act=del&id=" + wolPos);
+			}
+		})
+		.setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog, int which) {
+				dialog.dismiss();
+			}
+		})
+		.create();
+		dialog.show();
+	}
+
+
 	/*
 	 * Method for editing / adding a host
 	 * 
 	 * If newHost == true  - host is added
 	 * If newHost == false - host is edited
+	 * 
+	 * If entered mac address is not valid, dialog does not close & a toast message is displayed
 	 * 
 	 */
 
@@ -213,73 +212,88 @@ public class WolActivity extends CustomActivity
 			description.setText(w.getDesc());
 		}
 
-		AlertDialog dialog = new AlertDialog.Builder(this)
-		//.setIcon(android.R.drawable.ic_dialog_alert)
-		.setTitle("Edit/Add a host")
+		final AlertDialog d = new AlertDialog.Builder(this)
 		.setView(dialog_layout)
-		.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-			public void onClick(DialogInterface dialog, int which) {
-
-				Wol w = null;
-				if (addHost != true)
-				{
-					w = wolStore.get(wolPos);
-					Interfaces in = interfaceStore.get(spinner.getSelectedItemPosition());
-
-					w.setInterfaceAlias(in.getAlias());
-					w.setInterfaceName(in.getName());
-					w.setMac(macAddress.getText().toString());
-					w.setDesc(description.getText().toString());
-				}
-				else 
-				{
-					Interfaces in = interfaceStore.get(spinner.getSelectedItemPosition());
-					w = new Wol(in.getAlias(), in.getName());
-					w.setMac(macAddress.getText().toString());
-					w.setDesc(description.getText().toString());
-					Log.d(TAG, "size of wol store: " + wolStore.size());
-					Log.d(TAG, "adding new host at pos: " + wolStore.size());
-
-					wolStore.add(w);
-				}
-
-				String query = "";
-				String id = "";
-				try {
-					query = 
-							"interface=" + URLEncoder.encode(w.getInterfaceName(),"ISO-8859-1") +
-							"&mac=" + URLEncoder.encode(w.getMac().toString(),"ISO-8859-1") +
-							"&descr=" + URLEncoder.encode(w.getDesc().toString(),"ISO-8859-1") +
-							"&Submit=Save" ;
-
-					if (addHost==false) // if editing
-						id = Integer.toString(wolPos);
-
-					Log.d(TAG, "query: " + query);
-					Log.d(TAG, "id: " + id);
-
-				} catch (UnsupportedEncodingException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-				new PfWolPost().execute(query, id);
-
-				//Dismiss once everything is OK.
-				dialog.dismiss();					
+		.setTitle("Title")
+		.setPositiveButton(android.R.string.ok,
+				new Dialog.OnClickListener() {
+			@Override
+			public void onClick(DialogInterface d, int which) {
+				//Do nothing here. We override the onclick
 			}
 		})
-		.setNegativeButton("Close", new DialogInterface.OnClickListener() {
-			public void onClick(DialogInterface dialog, int which) {
-				dialog.dismiss();
-			}
-		})
+		.setNegativeButton(android.R.string.cancel, null)
 		.create();
-		dialog.show();
+
+		d.setOnShowListener(new DialogInterface.OnShowListener() {
+
+			@Override
+			public void onShow(DialogInterface dialog) {
+
+				Button b = d.getButton(AlertDialog.BUTTON_POSITIVE);
+				b.setOnClickListener(new View.OnClickListener() {
+
+					@Override
+					public void onClick(View view) {
+
+						if(isMac(macAddress.getText().toString()) == true)
+						{
+							Wol w = null;
+							if (addHost != true)
+							{
+								w = wolStore.get(wolPos);
+								Interfaces in = interfaceStore.get(spinner.getSelectedItemPosition());
+
+								w.setInterfaceAlias(in.getAlias());
+								w.setInterfaceName(in.getName());
+								w.setMac(macAddress.getText().toString());
+								w.setDesc(description.getText().toString());
+							}
+							else 
+							{
+								Interfaces in = interfaceStore.get(spinner.getSelectedItemPosition());
+								w = new Wol(in.getAlias(), in.getName());
+								w.setMac(macAddress.getText().toString());
+								w.setDesc(description.getText().toString());
+								Log.d(TAG, "size of wol store: " + wolStore.size());
+								Log.d(TAG, "adding new host at pos: " + wolStore.size());
+
+								wolStore.add(w);
+							}
+
+							String query = "";
+							String id = "";
+
+							try {
+								query = 
+										"interface=" + URLEncoder.encode(w.getInterfaceName(),"ISO-8859-1") +
+										"&mac=" + URLEncoder.encode(w.getMac().toString(),"ISO-8859-1") +
+										"&descr=" + URLEncoder.encode(w.getDesc().toString(),"ISO-8859-1") +
+										"&Submit=Save" ;
+
+								if (addHost==false) // if editing
+									id = Integer.toString(wolPos);
+
+								Log.d(TAG, "query: " + query);
+								Log.d(TAG, "id: " + id);
+
+							} catch (UnsupportedEncodingException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
+							new PfWolPost().execute(query, id);
+						}
+						else
+							Toast.makeText(getApplicationContext(), "This is not a valid Mac address", Toast.LENGTH_SHORT).show();
+					}
+				});
+			}
+		});
+		d.show();
 	}
 
 	/*
-	 * Method to enter a Mac address and send a magic packet 
-	 * 
+	 * Method to enter a Mac address and send a magic packet
 	 */
 
 	public void manualWolAlert()
@@ -294,47 +308,83 @@ public class WolActivity extends CustomActivity
 		spinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item); // The drop down vieww
 		spinner.setAdapter(spinnerArrayAdapter);
 
-		AlertDialog dialog = new AlertDialog.Builder(this)
-		//.setIcon(android.R.drawable.ic_dialog_alert)
-		.setTitle("Enter host details to wake")
+		final AlertDialog d = new AlertDialog.Builder(this)
 		.setView(dialog_layout)
-		.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-			public void onClick(DialogInterface dialog, int which) {
-
-				editText.getText().toString();
-				spinner.getSelectedItemPosition();
-
-				Interfaces in = interfaceStore.get(spinner.getSelectedItemPosition());
-				String query = "";
-				try {
-					query = 
-							"__csrf_magic=" + URLEncoder.encode(csrfString,"ISO-8859-1") +
-							"&interface=" + URLEncoder.encode(in.getName(),"ISO-8859-1") +
-							"&mac=" + URLEncoder.encode(editText.getText().toString(),"ISO-8859-1") +
-							"&Submit=Send" ;
-
-					Log.d(TAG, "query: " + query);
-
-				} catch (UnsupportedEncodingException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-				new PfWol().execute(sd.getURL(subDrop) + query);
-
-				//Dismiss once everything is OK.
-				dialog.dismiss();					
+		.setTitle("Title")
+		.setPositiveButton(android.R.string.ok,
+				new Dialog.OnClickListener() {
+			@Override
+			public void onClick(DialogInterface d, int which) {
+				//Do nothing here. We override the onclick
 			}
 		})
-		.setNegativeButton("Close", new DialogInterface.OnClickListener() {
-			public void onClick(DialogInterface dialog, int which) {
-				dialog.dismiss();
-			}
-		})
+		.setNegativeButton(android.R.string.cancel, null)
 		.create();
-		dialog.show();
+
+		d.setOnShowListener(new DialogInterface.OnShowListener() {
+
+			@Override
+			public void onShow(DialogInterface dialog) {
+
+				Button b = d.getButton(AlertDialog.BUTTON_POSITIVE);
+				b.setOnClickListener(new View.OnClickListener() {
+
+					@Override
+					public void onClick(View view) {
+
+						if(isMac(editText.getText().toString()) == true)
+						{
+							editText.getText().toString();
+							spinner.getSelectedItemPosition();
+
+							Interfaces in = interfaceStore.get(spinner.getSelectedItemPosition());
+							String query = "";
+							try {
+								query = 
+										"__csrf_magic=" + URLEncoder.encode(csrfString,"ISO-8859-1") +
+										"&interface=" + URLEncoder.encode(in.getName(),"ISO-8859-1") +
+										"&mac=" + URLEncoder.encode(editText.getText().toString(),"ISO-8859-1") +
+										"&Submit=Send" ;
+
+								Log.d(TAG, "query: " + query);
+
+							} catch (UnsupportedEncodingException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
+							new PfWol().execute(sd.getURL(subDrop) + query);
+
+							d.dismiss();					
+						}
+						else
+							Toast.makeText(getApplicationContext(), "This is not a valid Mac address", Toast.LENGTH_SHORT).show();
+					}
+				});
+			}
+		});
+		d.show();
+	}
+
+	/*
+	 * Method to send the magic packet
+	 */
+
+	public void sendMagicPacket(int position){
+		new PfWol().execute(sd.getURL(subDrop) + "?mac=" + wolStore.get(position).getMac() + "&if=" + wolStore.get(position).getInterfaceName());
 	}
 
 
+	/*
+	 * Method to check is entered mac address is a valid mac address
+	 */
+
+	public boolean isMac(String macAddress)
+	{
+		if(macAddress.matches("^([0-9A-Fa-f]{2}[:-]){5}([0-9A-Fa-f]{2})$"))
+			return true;
+		else
+			return false;
+	}
 
 
 	/*
@@ -370,9 +420,7 @@ public class WolActivity extends CustomActivity
 		protected String doInBackground(String... args) {
 
 			try {
-
 				String wolPage = "";
-				
 				if (pf.getProtocol().equals("HTTP"))
 				{
 					HttpMethods methods = new HttpMethods(pf.getHttpCookieStore());
