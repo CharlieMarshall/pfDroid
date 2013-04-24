@@ -1,19 +1,22 @@
 package charlie.marshall.pfsense;
 
 import java.net.URL;
+import java.util.ArrayList;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
-
-// TODO check MAC addresses are correctly formatted
-// TODO check descriptions are not empty - we cant have an empty client
+import android.widget.ArrayAdapter;
+import android.widget.CheckBox;
+import android.widget.EditText;
+import android.widget.Spinner;
 
 public class InterfacesActivity extends CustomActivity
 {
@@ -21,6 +24,13 @@ public class InterfacesActivity extends CustomActivity
 	private SubDrop sd;
 	private int menu, subDrop;
 
+	private boolean interfaceStatus = false;
+	private int selectedType, selectedSpeed;
+	private ArrayList<String> typeStore, speedStore; 
+	private String description = "";
+	private String mac = "";
+	private String mtu = "";
+	private String mss = "";
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) 
@@ -35,16 +45,54 @@ public class InterfacesActivity extends CustomActivity
 		subDrop = i.getIntExtra("subDrop", 0);
 
 		sd = pf.getSubDrops(menu);
-		new PfPower().execute(sd.getURL(subDrop));
+		new PfFetch().execute(sd.getURL(subDrop));
 	}
 
 	/*
-	 * Subclass for ASYNC task
-	 * 
-	 * Gets the WOL page
+	 * Method to draw the interface
 	 */
 
-	class PfPower extends AsyncTask<String, Void, String>
+	public void drawInterface()
+	{
+		CheckBox interf = (CheckBox) findViewById(R.id.enableInterface);
+		if(interfaceStatus == true)
+			interf.setChecked(true);
+		else
+			interf.setChecked(false);
+
+		Spinner typeSpinner = (Spinner) findViewById(R.id.type);  
+
+		// bind to the ArrayList (needs a toString method in the SectorList class)
+		ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, typeStore);
+		spinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item); // The drop down vieww
+		typeSpinner.setAdapter(spinnerArrayAdapter);
+		typeSpinner.setSelection(selectedType);
+
+		EditText descET = (EditText) findViewById(R.id.desc);
+		EditText macET = (EditText) findViewById(R.id.macAddress);
+		EditText mtuET = (EditText) findViewById(R.id.mtu);
+		EditText mssET = (EditText) findViewById(R.id.mss);
+
+		descET.setText(description);
+		macET.setText(mac);
+		mtuET.setText(mtu);
+		mssET.setText(mss);
+
+		Spinner speedSpinner = (Spinner) findViewById(R.id.speed);  
+
+		// bind to the ArrayList (needs a toString method in the SectorList class)
+		ArrayAdapter<String> spinnerSpeedArrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, speedStore);
+		spinnerSpeedArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item); // The drop down vieww
+		speedSpinner.setAdapter(spinnerArrayAdapter);
+		speedSpinner.setSelection(selectedSpeed);
+	}
+	/*
+	 * Subclass for ASYNC task
+	 * 
+	 * Gets the Interface page
+	 */
+
+	class PfFetch extends AsyncTask<String, Void, String>
 	{
 
 		ProgressDialog dialogT;
@@ -54,7 +102,7 @@ public class InterfacesActivity extends CustomActivity
 		{
 			try {
 				dialogT = new ProgressDialog(InterfacesActivity.this);
-				dialogT.setMessage("Scraping page...");
+				dialogT.setMessage("Retrieving page...");
 				dialogT.setIndeterminate(true);
 				dialogT.setCancelable(false);
 				dialogT.show();
@@ -93,6 +141,7 @@ public class InterfacesActivity extends CustomActivity
 
 		@Override
 		protected void onPostExecute(String result) {
+			drawInterface();
 			dialogT.dismiss();
 
 		}
@@ -100,31 +149,58 @@ public class InterfacesActivity extends CustomActivity
 
 	public void scrapeInterface(String page)
 	{
+		typeStore = new ArrayList<String>();
+		speedStore = new ArrayList<String>();
+
 		Document doc = Jsoup.parse(page, "ISO-8859-1");
 
 		// get csrf
 		Element csrf = doc.select("form input[name=__csrf_magic]").first();
 		String csrfString = csrf.attr("value"); 
 
-		//get interface status 
-
-		//form action="interfaces.php"
-		//input name="enable" type="checkbox" value="yes"
-
+		// get the interface status
+		// enabled = true
+		// disabled = false
 		Element enabled = doc.select("form[action=interfaces.php] input[name=enable]").first();
-		String enableInterface = enabled.attr("value"); 
+		interfaceStatus = enabled.hasAttr("checked"); 
 
-		Element description = doc.select("form[action=interfaces.php] input[name=descr]").first();
-		String desc = description.attr("value"); 
+		// get the interface description
+		Element desc = doc.select("form[action=interfaces.php] input[name=descr]").first();
+		description = desc.attr("value"); 
 
-		Element mac = doc.select("form[action=interfaces.php] input[name=spoofmac]").first();
-		String macAddress = mac.attr("value"); 
+		// get the list of types
+		Elements types = doc.select("form[action=interfaces.php] select[name=type] option");
+		for(int i=0; i<types.size(); i++)
+		{
+			Element e = types.get(i);
+			if(e.hasAttr("selected"))
+				selectedType = i; // get the position of the currently selected type
 
-		Element mtu = doc.select("form[action=interfaces.php] input[name=mtu]").first();
-		String MTU = mtu.attr("value"); 
+			typeStore.add(e.text());
+		}
 
-		Element mss = doc.select("form[action=interfaces.php] input[name=mss]").first();
-		String MSS = mss.attr("value"); 
+		// get the mac address
+		Element macAddress = doc.select("form[action=interfaces.php] input[name=spoofmac]").first();
+		mac = macAddress.attr("value");
+
+		// get the mtu
+		Element MTU = doc.select("form[action=interfaces.php] input[name=mtu]").first();
+		mtu = MTU.attr("value");
+
+		// get the mss
+		Element MSS = doc.select("form[action=interfaces.php] input[name=mss]").first();
+		mss = MSS.attr("value");
+
+		// get the list of speed and duplex
+		Elements speed = doc.select("form[action=interfaces.php] select[name=mediaopt] option");
+		for(int i=0; i<speed.size(); i++)
+		{
+			Element e = speed.get(i);
+			if(e.hasAttr("selected"))
+				selectedSpeed = i; // get the position of the currently selected speed
+
+			speedStore.add(e.text());
+		}
 	}
 
 }

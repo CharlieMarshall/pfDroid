@@ -18,6 +18,18 @@
         android:text="Enable Interface" />
     
     <TextView
+        android:id="@+id/descLabel"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="Description" />
+    
+     <EditText
+        android:id="@+id/desc"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:inputType="textNoSuggestions" />
+    
+    <TextView
         android:id="@+id/typeLabel"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
