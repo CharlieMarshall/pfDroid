@@ -88,6 +88,9 @@
         <activity
             android:name="charlie.marshall.pfsense.ViewArpActivity"
             android:label="View Arp entry" />
+        <activity
+            android:name="charlie.marshall.pfsense.AuthenticationActivity"
+            android:label="Authentication" />
         
     </application>
 

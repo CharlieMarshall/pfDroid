@@ -129,6 +129,8 @@ public class SubIndexActivity extends ListActivity {
 				{ 
 					if (sd.getTitle(position).equals("ARP Table"))
 						i = new Intent(SubIndexActivity.this, ArpActivity.class);
+					else if (sd.getTitle(position).equals("Authentication"))
+						i = new Intent(SubIndexActivity.this, AuthenticationActivity.class);
 					else if (sd.getTitle(position).equals("DNS Lookup"))
 						i = new Intent(SubIndexActivity.this, DnsActivity.class);
 					else if (sd.getTitle(position).equals("Factory Defaults"))
