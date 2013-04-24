@@ -91,6 +91,9 @@
         <activity
             android:name="charlie.marshall.pfsense.AuthenticationActivity"
             android:label="Authentication" />
+        <activity
+            android:name="charlie.marshall.pfsense.TablesActivity"
+            android:label="Tables" />
         
     </application>
 

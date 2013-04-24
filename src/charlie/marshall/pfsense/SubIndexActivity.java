@@ -163,6 +163,8 @@ public class SubIndexActivity extends ListActivity {
 						i = new Intent(SubIndexActivity.this, SystemActivityActivity.class);
 					else if (sd.getTitle(position).equals("Traceroute"))
 						i = new Intent(SubIndexActivity.this, TracerouteActivity.class);
+					else if (sd.getTitle(position).equals("Tables"))
+						i = new Intent(SubIndexActivity.this, TablesActivity.class);
 					else
 					{
 						Toast.makeText(getApplicationContext(), "TO DO", Toast.LENGTH_SHORT).show();
