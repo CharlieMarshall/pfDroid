@@ -61,7 +61,7 @@ public class TablesActivity extends CustomActivity
 	}
 
 	/*
-	 * OnClick method for the ping button
+	 * OnClick method for the view button
 	 */
 
 	public void onClick(View view)
@@ -145,12 +145,12 @@ public class TablesActivity extends CustomActivity
 
 		@Override
 		protected void onPostExecute(String result) {
-			String tableResult = scrapePingResult(result); 
+			String tableResult = scrapePage(result); 
 			drawActivity();
 			updateText(tableResult);
 			dialogT.dismiss();
 		}
-	} // end of postPingAsync subclass
+	} // end of postTablesAsync subclass
 
 
 
@@ -162,7 +162,7 @@ public class TablesActivity extends CustomActivity
 	 * Scrapes the page for the resulting tables
 	 */
 
-	public String scrapePingResult(String page)
+	public String scrapePage(String page)
 	{
 		String returnString = "";
 		Document doc = Jsoup.parse(page, "ISO-8859-1");
