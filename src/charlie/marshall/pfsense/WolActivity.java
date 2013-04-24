@@ -214,7 +214,7 @@ public class WolActivity extends CustomActivity
 
 		final AlertDialog d = new AlertDialog.Builder(this)
 		.setView(dialog_layout)
-		.setTitle("Title")
+		.setTitle("Edit wol host")
 		.setPositiveButton(android.R.string.ok,
 				new Dialog.OnClickListener() {
 			@Override
@@ -310,7 +310,7 @@ public class WolActivity extends CustomActivity
 
 		final AlertDialog d = new AlertDialog.Builder(this)
 		.setView(dialog_layout)
-		.setTitle("Title")
+		.setTitle("Wake a host")
 		.setPositiveButton(android.R.string.ok,
 				new Dialog.OnClickListener() {
 			@Override
