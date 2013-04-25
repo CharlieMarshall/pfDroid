@@ -21,69 +21,81 @@
         android:id="@+id/descLabel"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:text="Description" />
+        android:text="Description"
+        android:visibility="gone" />
     
      <EditText
         android:id="@+id/desc"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:inputType="textNoSuggestions" />
+        android:inputType="textNoSuggestions"
+        android:visibility="gone" />
     
     <TextView
         android:id="@+id/typeLabel"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:text="Type" />
+        android:text="Type" 
+        android:visibility="gone" />
     
     <Spinner
         android:id="@+id/type"
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:visibility="gone"  />
 
     <TextView
-        android:id="@+id/mac"
+        android:id="@+id/macLabel"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:text="MAC address" />
+        android:text="MAC address"
+        android:visibility="gone" />
     
      <EditText
         android:id="@+id/macAddress"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:inputType="textNoSuggestions" />
+        android:inputType="textNoSuggestions"
+        android:visibility="gone" />
      
       <TextView
         android:id="@+id/mtuLabel"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:text="MTU" />
+        android:text="MTU"
+        android:visibility="gone" />
     
      <EditText
         android:id="@+id/mtu"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:inputType="textNoSuggestions" />
+        android:inputType="textNoSuggestions"
+        android:visibility="gone" />
      
       <TextView
-        android:id="@+id/msslabel"
+        android:id="@+id/mssLabel"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:text="MSS" />
+        android:text="MSS"
+        android:visibility="gone" />
     
      <EditText
         android:id="@+id/mss"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:inputType="textNoSuggestions" />
+        android:inputType="textNoSuggestions"
+        android:visibility="gone" />
 
      <TextView
         android:id="@+id/speedLabel"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:text="Speed and Duplex" />
+        android:text="Speed and Duplex"
+        android:visibility="gone" />
     
     <Spinner
         android:id="@+id/speed"
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:visibility="gone" />
 </LinearLayout>

@@ -13,10 +13,12 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 public class InterfacesActivity extends CustomActivity
 {
@@ -55,36 +57,65 @@ public class InterfacesActivity extends CustomActivity
 	public void drawInterface()
 	{
 		CheckBox interf = (CheckBox) findViewById(R.id.enableInterface);
-		if(interfaceStatus == true)
-			interf.setChecked(true);
-		else
-			interf.setChecked(false);
-
+		
 		Spinner typeSpinner = (Spinner) findViewById(R.id.type);  
-
-		// bind to the ArrayList (needs a toString method in the SectorList class)
-		ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, typeStore);
-		spinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item); // The drop down vieww
-		typeSpinner.setAdapter(spinnerArrayAdapter);
-		typeSpinner.setSelection(selectedType);
+		Spinner speedSpinner = (Spinner) findViewById(R.id.speed);  
 
 		EditText descET = (EditText) findViewById(R.id.desc);
 		EditText macET = (EditText) findViewById(R.id.macAddress);
 		EditText mtuET = (EditText) findViewById(R.id.mtu);
 		EditText mssET = (EditText) findViewById(R.id.mss);
+		
+		if(interfaceStatus == true)
+		{
+			interf.setChecked(true); // tick the checkbox if interface is enabled
+			
+			// show the interface elements
+			typeSpinner.setVisibility(View.VISIBLE);
+			macET.setVisibility(View.VISIBLE);
+			mtuET.setVisibility(View.VISIBLE);
+			descET.setVisibility(View.VISIBLE);
+			mssET.setVisibility(View.VISIBLE);
+			speedSpinner.setVisibility(View.VISIBLE);
+			
+			TextView descLabel = (TextView) findViewById(R.id.descLabel);
+			descLabel.setVisibility(View.VISIBLE);
+			TextView typeLabel = (TextView) findViewById(R.id.typeLabel);
+			typeLabel.setVisibility(View.VISIBLE);
+			TextView macLabel = (TextView) findViewById(R.id.macLabel);
+			macLabel.setVisibility(View.VISIBLE);
+			TextView mtuLabel = (TextView) findViewById(R.id.mtuLabel);
+			mtuLabel.setVisibility(View.VISIBLE);
+			TextView mssLabel = (TextView) findViewById(R.id.mssLabel);
+			mssLabel.setVisibility(View.VISIBLE);
+			TextView speedLabel = (TextView) findViewById(R.id.speedLabel);
+			speedLabel.setVisibility(View.VISIBLE);
+			
+			// bind to the ArrayList (needs a toString method in the SectorList class)
+			ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, typeStore);
+			spinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+			typeSpinner.setAdapter(spinnerArrayAdapter);
+			typeSpinner.setSelection(selectedType);
 
-		descET.setText(description);
-		macET.setText(mac);
-		mtuET.setText(mtu);
-		mssET.setText(mss);
+			descET.setText(description);
+			macET.setText(mac);
+			mtuET.setText(mtu);
+			mssET.setText(mss);
 
-		Spinner speedSpinner = (Spinner) findViewById(R.id.speed);  
+			// bind to the ArrayList (needs a toString method in the SectorList class)
+			ArrayAdapter<String> spinnerSpeedArrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, speedStore);
+			spinnerSpeedArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+			speedSpinner.setAdapter(spinnerArrayAdapter);
+			speedSpinner.setSelection(selectedSpeed);
+		}
+		else
+		{
+			// hide settings if interface is disabled
+			interf.setChecked(false);
+			
+		}
 
-		// bind to the ArrayList (needs a toString method in the SectorList class)
-		ArrayAdapter<String> spinnerSpeedArrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, speedStore);
-		spinnerSpeedArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item); // The drop down vieww
-		speedSpinner.setAdapter(spinnerArrayAdapter);
-		speedSpinner.setSelection(selectedSpeed);
+		
 	}
 	/*
 	 * Subclass for ASYNC task
