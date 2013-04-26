@@ -15,6 +15,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Spinner;
@@ -126,7 +127,7 @@ public class InterfacesActivity extends CustomActivity
 			// TODO
 			// remove toast messages
 			// fill out if else statement 
-			
+
 			// display nothing if "None" was selected
 			//if(typeSpinner.getSelectedItem().toString().equals("None"))
 
@@ -145,7 +146,7 @@ public class InterfacesActivity extends CustomActivity
 			else if(typeSpinner.getSelectedItem().toString().equals("DHCP"))
 			{
 				Toast.makeText(getApplicationContext(), "DHCP", Toast.LENGTH_SHORT).show();
-				
+
 				TextView dhcpIpLabel = (TextView) findViewById(R.id.IpLabel);
 				EditText dhcpIp = (EditText) findViewById(R.id.Ip);
 				Spinner dhcpSubnet = (Spinner) findViewById(R.id.Subnet);
@@ -155,14 +156,87 @@ public class InterfacesActivity extends CustomActivity
 				dhcpIp.setVisibility(View.VISIBLE);
 				dhcpSubnet.setVisibility(View.VISIBLE);
 			}
+			// TODO PPP
 			else if(typeSpinner.getSelectedItem().toString().equals("PPP"))
 				Toast.makeText(getApplicationContext(), "PPP", Toast.LENGTH_SHORT).show();
 			else if(typeSpinner.getSelectedItem().toString().equals("PPPoE"))
+			{
 				Toast.makeText(getApplicationContext(), "PPPoE", Toast.LENGTH_SHORT).show();
-			else if(typeSpinner.getSelectedItem().toString().equals("PPTP"))
-				Toast.makeText(getApplicationContext(), "PPTP", Toast.LENGTH_SHORT).show();
-			else if(typeSpinner.getSelectedItem().toString().equals("L2TP"))
-				Toast.makeText(getApplicationContext(), "L2TP", Toast.LENGTH_SHORT).show();
+
+				TextView pppoeUsernameLabel = (TextView) findViewById(R.id.usernameLabel);
+				EditText pppoeUsername = (EditText) findViewById(R.id.username);
+				TextView pppoePasswordLabel = (TextView) findViewById(R.id.passwordLabel);
+				EditText pppoePassword = (EditText) findViewById(R.id.password);
+				TextView pppoeServiceLabel = (TextView) findViewById(R.id.serviceLabel);
+				EditText pppoeService = (EditText) findViewById(R.id.service);
+				TextView pppoeDialLabel = (TextView) findViewById(R.id.dialLabel);
+				CheckBox pppoeDial = (CheckBox) findViewById(R.id.dial2);
+				TextView pppoeIdleLabel = (TextView) findViewById(R.id.idleLabel);
+				EditText pppoeIdle = (EditText) findViewById(R.id.idle2);
+				TextView pppoeResetLabel = (TextView) findViewById(R.id.resetLabel);
+				Spinner pppoReset = (Spinner) findViewById(R.id.resetSpinner);
+				TextView pppoAdvancedLabel = (TextView) findViewById(R.id.advancedLabel);
+				Button pppoButton = (Button) findViewById(R.id.advancedBtn);
+				/////////////////
+
+				pppoeUsernameLabel.setVisibility(View.VISIBLE);
+				pppoeUsername.setVisibility(View.VISIBLE);
+				pppoePasswordLabel.setVisibility(View.VISIBLE);
+				pppoePassword.setVisibility(View.VISIBLE);
+				pppoeServiceLabel.setVisibility(View.VISIBLE);
+				pppoeService.setVisibility(View.VISIBLE);
+				pppoeDialLabel.setVisibility(View.VISIBLE);
+				pppoeDial.setVisibility(View.VISIBLE);
+				pppoeIdleLabel.setVisibility(View.VISIBLE);
+				pppoeIdle.setVisibility(View.VISIBLE);
+				pppoeResetLabel.setVisibility(View.VISIBLE);
+				pppoReset.setVisibility(View.VISIBLE);
+				pppoAdvancedLabel.setVisibility(View.VISIBLE);
+				pppoButton.setVisibility(View.VISIBLE);
+
+			}
+			else if( (typeSpinner.getSelectedItem().toString().equals("PPTP")) || (typeSpinner.getSelectedItem().toString().equals("L2TP"))) 
+			{
+				Toast.makeText(getApplicationContext(), "PPTP or L2TP", Toast.LENGTH_SHORT).show();
+
+				TextView pptpUsernameLabel = (TextView) findViewById(R.id.usernameLabel);
+				EditText pptpUsername = (EditText) findViewById(R.id.username);
+				TextView pptpPasswordLabel = (TextView) findViewById(R.id.passwordLabel);
+				EditText pptpPassword = (EditText) findViewById(R.id.password);
+
+				TextView pptpLocalIpLabel = (TextView) findViewById(R.id.localIpLabel);
+				EditText pptpLocalIp = (EditText) findViewById(R.id.localIp);
+				Spinner pptpLocalSubnet = (Spinner) findViewById(R.id.localSubnet);
+				TextView pptpRemoteIpLabel = (TextView) findViewById(R.id.remoteIpLabel);
+				EditText pptpRemoteIp = (EditText) findViewById(R.id.remoteIp);
+
+				TextView pptpDialLabel = (TextView) findViewById(R.id.dialLabel);
+				CheckBox pptpDial = (CheckBox) findViewById(R.id.dial2);
+
+				TextView pptpidleLabel = (TextView) findViewById(R.id.idleLabel);
+				EditText pptpidle = (EditText) findViewById(R.id.idle2);
+
+				TextView pptpAdvancedLabel = (TextView) findViewById(R.id.advancedLabel);
+				Button pptpButton = (Button) findViewById(R.id.advancedBtn);
+
+				pptpUsernameLabel.setVisibility(View.VISIBLE);
+				pptpUsername.setVisibility(View.VISIBLE);
+
+				pptpPasswordLabel.setVisibility(View.VISIBLE);
+				pptpPassword.setVisibility(View.VISIBLE);
+				pptpLocalIpLabel.setVisibility(View.VISIBLE);
+				pptpLocalIp.setVisibility(View.VISIBLE);
+				pptpLocalSubnet.setVisibility(View.VISIBLE);
+				pptpRemoteIpLabel.setVisibility(View.VISIBLE);
+				pptpRemoteIp.setVisibility(View.VISIBLE);
+				pptpDialLabel.setVisibility(View.VISIBLE);
+				pptpDial.setVisibility(View.VISIBLE);
+
+				pptpidleLabel.setVisibility(View.VISIBLE);
+				pptpidle.setVisibility(View.VISIBLE);
+				pptpAdvancedLabel.setVisibility(View.VISIBLE);
+				pptpButton.setVisibility(View.VISIBLE);
+			}
 
 
 		}
