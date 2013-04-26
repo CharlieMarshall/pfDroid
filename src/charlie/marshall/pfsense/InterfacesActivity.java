@@ -18,6 +18,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -66,40 +67,23 @@ public class InterfacesActivity extends CustomActivity
 		{
 			interf.setChecked(true); // tick the checkbox if interface is enabled
 
+			// display gerneral conf & private networks interface options
+			LinearLayout generalConfLayout = (LinearLayout) findViewById(R.id.generalConfLayout);
+			LinearLayout privateNetworksLayout = (LinearLayout) findViewById(R.id.privateNetworksLayout);
+			generalConfLayout.setVisibility(View.VISIBLE);
+			privateNetworksLayout.setVisibility(View.VISIBLE);
+
 			// get reference to the general config elements
 			Spinner typeSpinner = (Spinner) findViewById(R.id.type);  			
 			Spinner speedSpinner = (Spinner) findViewById(R.id.speed);  
-
 			EditText descET = (EditText) findViewById(R.id.desc);
 			EditText macET = (EditText) findViewById(R.id.macAddress);
 			EditText mtuET = (EditText) findViewById(R.id.mtu);
 			EditText mssET = (EditText) findViewById(R.id.mss);
 
-			TextView descLabel = (TextView) findViewById(R.id.descLabel);
-			TextView typeLabel = (TextView) findViewById(R.id.typeLabel);
-			TextView macLabel = (TextView) findViewById(R.id.macLabel);
-			TextView mtuLabel = (TextView) findViewById(R.id.mtuLabel);
-			TextView mssLabel = (TextView) findViewById(R.id.mssLabel);
-			TextView speedLabel = (TextView) findViewById(R.id.speedLabel);
-
-			CheckBox privNet = (CheckBox) findViewById(R.id.privateNetworks);
-			CheckBox bogonNet = (CheckBox) findViewById(R.id.bogonNetworks);
-
-			// show the interface elements
-			typeSpinner.setVisibility(View.VISIBLE);
-			macET.setVisibility(View.VISIBLE);
-			mtuET.setVisibility(View.VISIBLE);
-			descET.setVisibility(View.VISIBLE);
-			mssET.setVisibility(View.VISIBLE);
-			speedSpinner.setVisibility(View.VISIBLE);
-			descLabel.setVisibility(View.VISIBLE);
-			typeLabel.setVisibility(View.VISIBLE);
-			macLabel.setVisibility(View.VISIBLE);
-			mtuLabel.setVisibility(View.VISIBLE);
-			mssLabel.setVisibility(View.VISIBLE);
-			speedLabel.setVisibility(View.VISIBLE);
-			privNet.setVisibility(View.VISIBLE);
-			bogonNet.setVisibility(View.VISIBLE);
+			// TODO currently not used but will be once we scrape for them
+			CheckBox privNet = (CheckBox) findViewById(R.id.blockPrivateNetworks);
+			CheckBox bogonNet = (CheckBox) findViewById(R.id.blockBogonNetworks);
 
 			// bind to the ArrayList
 			ArrayAdapter<String> typeArrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, typeStore);
@@ -134,27 +118,21 @@ public class InterfacesActivity extends CustomActivity
 			if(typeSpinner.getSelectedItem().toString().trim().equals("Static"))
 			{
 				Toast.makeText(getApplicationContext(), "Static", Toast.LENGTH_SHORT).show();
-
-				TextView staticIpLabel = (TextView) findViewById(R.id.IpLabel);
-				EditText staticIp = (EditText) findViewById(R.id.Ip);
-				Spinner staticSubnet = (Spinner) findViewById(R.id.Subnet);
-
-				staticIpLabel.setVisibility(View.VISIBLE);
-				staticIp.setVisibility(View.VISIBLE);
-				staticSubnet.setVisibility(View.VISIBLE);
+				
+				LinearLayout staticLayout = (LinearLayout) findViewById(R.id.staticLayout);
+				staticLayout.setVisibility(View.VISIBLE);	
 			}
 			else if(typeSpinner.getSelectedItem().toString().equals("DHCP"))
 			{
 				Toast.makeText(getApplicationContext(), "DHCP", Toast.LENGTH_SHORT).show();
 
-				TextView dhcpIpLabel = (TextView) findViewById(R.id.IpLabel);
-				EditText dhcpIp = (EditText) findViewById(R.id.Ip);
-				Spinner dhcpSubnet = (Spinner) findViewById(R.id.Subnet);
-
-				dhcpIpLabel.setText("Alias IP address");
-				dhcpIpLabel.setVisibility(View.VISIBLE);
-				dhcpIp.setVisibility(View.VISIBLE);
-				dhcpSubnet.setVisibility(View.VISIBLE);
+				LinearLayout dhcpConfLayout = (LinearLayout) findViewById(R.id.dhcpConfLayout);
+				dhcpConfLayout.setVisibility(View.VISIBLE);
+				
+				// TODO populate with scraped details
+				EditText dhcpHostname = (EditText) findViewById(R.id.dhcpHostName);
+				EditText dhcpIp = (EditText) findViewById(R.id.dhcpIp);
+				Spinner dhcpSubnet = (Spinner) findViewById(R.id.dhcpSubnet);
 			}
 			// TODO PPP
 			else if(typeSpinner.getSelectedItem().toString().equals("PPP"))
@@ -162,80 +140,35 @@ public class InterfacesActivity extends CustomActivity
 			else if(typeSpinner.getSelectedItem().toString().equals("PPPoE"))
 			{
 				Toast.makeText(getApplicationContext(), "PPPoE", Toast.LENGTH_SHORT).show();
+				
+				LinearLayout pppoeConfLayout = (LinearLayout) findViewById(R.id.pppoeConfLayout);
+				pppoeConfLayout.setVisibility(View.VISIBLE);
 
-				TextView pppoeUsernameLabel = (TextView) findViewById(R.id.usernameLabel);
-				EditText pppoeUsername = (EditText) findViewById(R.id.username);
-				TextView pppoePasswordLabel = (TextView) findViewById(R.id.passwordLabel);
-				EditText pppoePassword = (EditText) findViewById(R.id.password);
-				TextView pppoeServiceLabel = (TextView) findViewById(R.id.serviceLabel);
-				EditText pppoeService = (EditText) findViewById(R.id.service);
-				TextView pppoeDialLabel = (TextView) findViewById(R.id.dialLabel);
-				CheckBox pppoeDial = (CheckBox) findViewById(R.id.dial2);
-				TextView pppoeIdleLabel = (TextView) findViewById(R.id.idleLabel);
-				EditText pppoeIdle = (EditText) findViewById(R.id.idle2);
-				TextView pppoeResetLabel = (TextView) findViewById(R.id.resetLabel);
-				Spinner pppoReset = (Spinner) findViewById(R.id.resetSpinner);
-				TextView pppoAdvancedLabel = (TextView) findViewById(R.id.advancedLabel);
-				Button pppoButton = (Button) findViewById(R.id.advancedBtn);
-				/////////////////
-
-				pppoeUsernameLabel.setVisibility(View.VISIBLE);
-				pppoeUsername.setVisibility(View.VISIBLE);
-				pppoePasswordLabel.setVisibility(View.VISIBLE);
-				pppoePassword.setVisibility(View.VISIBLE);
-				pppoeServiceLabel.setVisibility(View.VISIBLE);
-				pppoeService.setVisibility(View.VISIBLE);
-				pppoeDialLabel.setVisibility(View.VISIBLE);
-				pppoeDial.setVisibility(View.VISIBLE);
-				pppoeIdleLabel.setVisibility(View.VISIBLE);
-				pppoeIdle.setVisibility(View.VISIBLE);
-				pppoeResetLabel.setVisibility(View.VISIBLE);
-				pppoReset.setVisibility(View.VISIBLE);
-				pppoAdvancedLabel.setVisibility(View.VISIBLE);
-				pppoButton.setVisibility(View.VISIBLE);
+				// TODO populate with scraped details
+				EditText pppoeUsername = (EditText) findViewById(R.id.usernamePppoe);
+				EditText pppoePassword = (EditText) findViewById(R.id.passwordPppoe);
+				EditText pppoeService = (EditText) findViewById(R.id.servicePppoe);
+				CheckBox pppoeDial = (CheckBox) findViewById(R.id.dialPppoe);
+				EditText pppoeIdle = (EditText) findViewById(R.id.idlePppoe);
+				Spinner pppoReset = (Spinner) findViewById(R.id.resetPppoeSpinner);
 
 			}
 			else if( (typeSpinner.getSelectedItem().toString().equals("PPTP")) || (typeSpinner.getSelectedItem().toString().equals("L2TP"))) 
 			{
 				Toast.makeText(getApplicationContext(), "PPTP or L2TP", Toast.LENGTH_SHORT).show();
 
-				TextView pptpUsernameLabel = (TextView) findViewById(R.id.usernameLabel);
-				EditText pptpUsername = (EditText) findViewById(R.id.username);
-				TextView pptpPasswordLabel = (TextView) findViewById(R.id.passwordLabel);
-				EditText pptpPassword = (EditText) findViewById(R.id.password);
+				LinearLayout pptpConfLayout = (LinearLayout) findViewById(R.id.pptpConfLayout);
+				pptpConfLayout.setVisibility(View.VISIBLE);
 
-				TextView pptpLocalIpLabel = (TextView) findViewById(R.id.localIpLabel);
-				EditText pptpLocalIp = (EditText) findViewById(R.id.localIp);
-				Spinner pptpLocalSubnet = (Spinner) findViewById(R.id.localSubnet);
-				TextView pptpRemoteIpLabel = (TextView) findViewById(R.id.remoteIpLabel);
-				EditText pptpRemoteIp = (EditText) findViewById(R.id.remoteIp);
-
-				TextView pptpDialLabel = (TextView) findViewById(R.id.dialLabel);
-				CheckBox pptpDial = (CheckBox) findViewById(R.id.dial2);
-
-				TextView pptpidleLabel = (TextView) findViewById(R.id.idleLabel);
-				EditText pptpidle = (EditText) findViewById(R.id.idle2);
-
-				TextView pptpAdvancedLabel = (TextView) findViewById(R.id.advancedLabel);
-				Button pptpButton = (Button) findViewById(R.id.advancedBtn);
-
-				pptpUsernameLabel.setVisibility(View.VISIBLE);
-				pptpUsername.setVisibility(View.VISIBLE);
-
-				pptpPasswordLabel.setVisibility(View.VISIBLE);
-				pptpPassword.setVisibility(View.VISIBLE);
-				pptpLocalIpLabel.setVisibility(View.VISIBLE);
-				pptpLocalIp.setVisibility(View.VISIBLE);
-				pptpLocalSubnet.setVisibility(View.VISIBLE);
-				pptpRemoteIpLabel.setVisibility(View.VISIBLE);
-				pptpRemoteIp.setVisibility(View.VISIBLE);
-				pptpDialLabel.setVisibility(View.VISIBLE);
-				pptpDial.setVisibility(View.VISIBLE);
-
-				pptpidleLabel.setVisibility(View.VISIBLE);
-				pptpidle.setVisibility(View.VISIBLE);
-				pptpAdvancedLabel.setVisibility(View.VISIBLE);
-				pptpButton.setVisibility(View.VISIBLE);
+				// TODO populate with scraped details
+				EditText pptpUsername = (EditText) findViewById(R.id.pptpUsername);
+				EditText pptpPassword = (EditText) findViewById(R.id.pptpPassword);
+				EditText pptpLocalIp = (EditText) findViewById(R.id.pptpLocalIp);
+				Spinner pptpLocalSubnet = (Spinner) findViewById(R.id.pptpLocalSubnet);
+				EditText pptpRemoteIp = (EditText) findViewById(R.id.pptpRemoteIp);
+				CheckBox pptpDial = (CheckBox) findViewById(R.id.pptpDial);
+				EditText pptpidle = (EditText) findViewById(R.id.pptpIdle);
+				Button pptpButton = (Button) findViewById(R.id.pptpAadvancedBtn);
 			}
 
 

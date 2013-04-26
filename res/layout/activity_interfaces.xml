@@ -4,8 +4,10 @@
     android:layout_height="fill_parent"
     android:orientation="vertical" >
 
+    <!-- mainLayout is useless apart from it provdes the one child for the scrollView -->
+
     <LinearLayout
-        android:id="@+id/linear"
+        android:id="@+id/mainLayout"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:orientation="vertical" >
@@ -22,306 +24,383 @@
             android:layout_height="wrap_content"
             android:text="Enable Interface" />
 
-        <TextView
-            android:id="@+id/descLabel"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:text="Description"
-            android:visibility="gone" />
-
-        <EditText
-            android:id="@+id/desc"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:inputType="textNoSuggestions"
-            android:visibility="gone" />
-
-        <TextView
-            android:id="@+id/typeLabel"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:text="Type"
-            android:visibility="gone" />
-
-        <Spinner
-            android:id="@+id/type"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:visibility="gone" />
-
-        <TextView
-            android:id="@+id/macLabel"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:text="MAC address"
-            android:visibility="gone" />
-
-        <EditText
-            android:id="@+id/macAddress"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:inputType="textNoSuggestions"
-            android:visibility="gone" />
-
-        <TextView
-            android:id="@+id/mtuLabel"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:text="MTU"
-            android:visibility="gone" />
-
-        <EditText
-            android:id="@+id/mtu"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:hint="If blank default MTU will be used"
-            android:inputType="textNoSuggestions"
-            android:visibility="gone" />
-
-        <TextView
-            android:id="@+id/mssLabel"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:text="MSS"
-            android:visibility="gone" />
-
-        <EditText
-            android:id="@+id/mss"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:inputType="textNoSuggestions"
-            android:visibility="gone" />
-
-        <TextView
-            android:id="@+id/speedLabel"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:text="Speed and Duplex"
-            android:visibility="gone" />
-
-        <Spinner
-            android:id="@+id/speed"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:visibility="gone" />
-
-        <!-- Additional fields for a Static IP / DHCP conf -->
-
         <LinearLayout
+            android:id="@+id/generalConfLayout"
             android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:weightSum="6" >
+            android:layout_height="fill_parent"
+            android:orientation="vertical"
+            android:visibility="gone" >
 
             <TextView
-                android:id="@+id/IpLabel"
-                android:layout_width="0px"
+                android:id="@+id/descLabel"
+                android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="2"
-                android:text="IP address"
-                android:visibility="gone" />
+                android:text="Description" />
 
             <EditText
-                android:id="@+id/Ip"
-                android:layout_width="0px"
+                android:id="@+id/desc"
+                android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="3"
-                android:visibility="gone" />
+                android:inputType="textNoSuggestions" />
+
+            <TextView
+                android:id="@+id/typeLabel"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="Type" />
 
             <Spinner
-                android:id="@+id/Subnet"
-                android:layout_width="0px"
+                android:id="@+id/type"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content" />
+
+            <TextView
+                android:id="@+id/macLabel"
+                android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:visibility="gone" />
+                android:text="MAC address" />
+
+            <EditText
+                android:id="@+id/macAddress"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textNoSuggestions" />
+
+            <TextView
+                android:id="@+id/mtuLabel"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="MTU" />
+
+            <EditText
+                android:id="@+id/mtu"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:hint="If blank default MTU will be used"
+                android:inputType="textNoSuggestions" />
+
+            <TextView
+                android:id="@+id/mssLabel"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="MSS" />
+
+            <EditText
+                android:id="@+id/mss"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textNoSuggestions" />
+
+            <TextView
+                android:id="@+id/speedLabel"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="Speed and Duplex" />
+
+            <Spinner
+                android:id="@+id/speed"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+
+        <!-- Additional fields for a Static IP conf -->
+
+        <LinearLayout
+            android:id="@+id/staticLayout"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:visibility="gone" >
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:weightSum="6" >
+
+                <TextView
+                    android:id="@+id/IpLabel"
+                    android:layout_width="0px"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2"
+                    android:text="IP address" />
+
+                <EditText
+                    android:id="@+id/Ip"
+                    android:layout_width="0px"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="3" />
+
+                <Spinner
+                    android:id="@+id/Subnet"
+                    android:layout_width="0px"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1" />
+            </LinearLayout>
         </LinearLayout>
 
         <!-- Additional fields for a DDHCP conf -->
 
         <LinearLayout
+            android:id="@+id/dhcpConfLayout"
             android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:weightSum="2" >
+            android:layout_height="fill_parent"
+            android:orientation="vertical"
+            android:visibility="gone" >
 
             <TextView
-                android:id="@+id/hostNameLabel"
-                android:layout_width="0px"
+                android:id="@+id/dhcpHostNameLabel"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
                 android:text="Hostname"
                 android:visibility="gone" />
 
             <EditText
-                android:id="@+id/hostName"
-                android:layout_width="0px"
+                android:id="@+id/dhcpHostName"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
                 android:visibility="gone" />
-        </LinearLayout>
 
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:visibility="gone"
+                android:weightSum="6" >
+
+                <TextView
+                    android:id="@+id/dhcpIpLabel"
+                    android:layout_width="0px"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2"
+                    android:text="IP address" />
+
+                <EditText
+                    android:id="@+id/dhcpIp"
+                    android:layout_width="0px"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="3" />
+
+                <Spinner
+                    android:id="@+id/dhcpSubnet"
+                    android:layout_width="0px"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1" />
+            </LinearLayout>
+        </LinearLayout>
         <!-- Additional fields for the PPPoE conf -->
 
-        <TextView
-            android:id="@+id/serviceLabel"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Service name"
-            android:visibility="gone" />
-
-        <EditText
-            android:id="@+id/service"
+        <LinearLayout
+            android:id="@+id/pppoeConfLayout"
             android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:visibility="gone" />
+            android:layout_height="fill_parent"
+            android:orientation="vertical"
+            android:visibility="gone" >
 
-        <TextView
-            android:id="@+id/resetLabel"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Periodic reset"
-            android:visibility="gone" />
+            <TextView
+                android:id="@+id/usernamePppoeLabel"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="Username" />
 
-        <Spinner
-            android:id="@+id/resetSpinner"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:visibility="gone" />
+            <EditText
+                android:id="@+id/usernamePppoe"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textNoSuggestions" />
+
+            <TextView
+                android:id="@+id/passwordPppoeLabel"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="Password" />
+
+            <EditText
+                android:id="@+id/passwordPppoe"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textPassword" />
+
+            <TextView
+                android:id="@+id/servicePppoeLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Service name" />
+
+            <EditText
+                android:id="@+id/servicePppoe"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content" />
+
+            <TextView
+                android:id="@+id/dialPppoeLabel"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="Dial on demand" />
+
+            <CheckBox
+                android:id="@+id/dialPppoe"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Enable dial on demand mode" />
+
+            <TextView
+                android:id="@+id/idlePppoeLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Idle timeout (seconds)" />
+
+            <EditText
+                android:id="@+id/idlePppoe"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content" />
+
+            <TextView
+                android:id="@+id/resetPppoeLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Periodic reset" />
+
+            <Spinner
+                android:id="@+id/resetPppoeSpinner"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content" />
+
+            <TextView
+                android:id="@+id/advancedPppoeLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Advanced" />
+
+            <Button
+                android:id="@+id/advancedPppoe"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onClick="onClick"
+                android:text="Advanced configuration options" />
+        </LinearLayout>
 
         <!-- Additional fields for the PPTP/L2TP conf -->
 
-        <TextView
-            android:id="@+id/localIpLabel"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Local IP address"
-            android:visibility="gone" />
-
-        <EditText
-            android:id="@+id/localIp"
+        <LinearLayout
+            android:id="@+id/pptpConfLayout"
             android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:visibility="gone" />
+            android:layout_height="fill_parent"
+            android:orientation="vertical"
+            android:visibility="gone" >
 
-        <Spinner
-            android:id="@+id/localSubnet"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:visibility="gone" />
+            <TextView
+                android:id="@+id/pptpUsernameLabel"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="Username" />
 
-        <TextView
-            android:id="@+id/remoteIpLabel"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Remote IP address"
-            android:visibility="gone" />
+            <EditText
+                android:id="@+id/pptpUsername"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textNoSuggestions" />
 
-        <EditText
-            android:id="@+id/remoteIp"
+            <TextView
+                android:id="@+id/pptpPasswordLabel"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="Password" />
+
+            <EditText
+                android:id="@+id/pptpPassword"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textPassword" />
+
+            <TextView
+                android:id="@+id/pptpLocalIpLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Local IP address" />
+
+            <EditText
+                android:id="@+id/pptpLocalIp"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content" />
+
+            <Spinner
+                android:id="@+id/pptpLocalSubnet"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <TextView
+                android:id="@+id/pptpRemoteIpLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Remote IP address" />
+
+            <EditText
+                android:id="@+id/pptpRemoteIp"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content" />
+
+            <CheckBox
+                android:id="@+id/pptpDial"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Enable dial on demand mode" />
+
+            <TextView
+                android:id="@+id/pptpIidleLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Idle timeout (seconds)" />
+
+            <EditText
+                android:id="@+id/pptpIdle"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content" />
+
+            <TextView
+                android:id="@+id/pptpResetLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Periodic reset" />
+
+            <Spinner
+                android:id="@+id/pptpResetSpinner"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content" />
+
+            <TextView
+                android:id="@+id/pptpAadvancedLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Advanced" />
+
+            <Button
+                android:id="@+id/pptpAadvancedBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onClick="onClick"
+                android:text="Advanced configuration options" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/privateNetworksLayout"
             android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:visibility="gone" />
+            android:layout_height="fill_parent"
+            android:orientation="vertical"
+            android:visibility="gone" >
 
-        <TextView
-            android:id="@+id/ipLabel"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="IP address"
-            android:visibility="gone" />
+            <CheckBox
+                android:id="@+id/blockPrivateNetworks"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Block private networks" />
 
-        <EditText
-            android:id="@+id/ip"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:visibility="gone" />
-
-        <TextView
-            android:id="@+id/idleLabel"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Idle timeout (seconds)"
-            android:visibility="gone" />
-
-        <EditText
-            android:id="@+id/idle2"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:visibility="gone" />
-
-        <!-- Generic fields -->
-
-        <TextView
-            android:id="@+id/usernameLabel"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:text="Username"
-            android:visibility="gone" />
-
-        <EditText
-            android:id="@+id/username"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:inputType="textNoSuggestions"
-            android:visibility="gone" />
-
-        <TextView
-            android:id="@+id/passwordLabel"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:text="Password"
-            android:visibility="gone" />
-
-        <EditText
-            android:id="@+id/password"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:inputType="textPassword"
-            android:visibility="gone" />
-
-        <TextView
-            android:id="@+id/dialLabel"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:text="Dial on demand"
-            android:visibility="gone" />
-
-        <CheckBox
-            android:id="@+id/dial2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Enable dial on demand mode"
-            android:visibility="gone" />
-
-        <TextView
-            android:id="@+id/advancedLabel"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Advanced"
-            android:visibility="gone" />
-
-        <Button
-            android:id="@+id/advancedBtn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:onClick="onClick"
-            android:text="Advanced configuration options"
-            android:visibility="gone" />
-
-        <!-- Finally the checkboxs & save button at the bottom -->
-
-        <CheckBox
-            android:id="@+id/privateNetworks"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Block private networks"
-            android:visibility="gone" />
-
-        <CheckBox
-            android:id="@+id/bogonNetworks"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Block bogon networks"
-            android:visibility="gone" />
+            <CheckBox
+                android:id="@+id/blockBogonNetworks"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Block bogon networks" />
+        </LinearLayout>
 
         <Button
             android:id="@+id/save"
