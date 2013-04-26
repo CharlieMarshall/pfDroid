@@ -20,8 +20,6 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
-import android.widget.TextView;
-import android.widget.Toast;
 
 public class InterfacesActivity extends CustomActivity
 {
@@ -80,27 +78,28 @@ public class InterfacesActivity extends CustomActivity
 			EditText macET = (EditText) findViewById(R.id.macAddress);
 			EditText mtuET = (EditText) findViewById(R.id.mtu);
 			EditText mssET = (EditText) findViewById(R.id.mss);
-
-			// TODO currently not used but will be once we scrape for them
-			CheckBox privNet = (CheckBox) findViewById(R.id.blockPrivateNetworks);
-			CheckBox bogonNet = (CheckBox) findViewById(R.id.blockBogonNetworks);
-
-			// bind to the ArrayList
-			ArrayAdapter<String> typeArrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, typeStore);
-			typeArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-			typeSpinner.setAdapter(typeArrayAdapter);
-			typeSpinner.setSelection(selectedType);
-			// bind to the ArrayList
-			ArrayAdapter<String> speedArrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, speedStore);
-			speedArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-			speedSpinner.setAdapter(speedArrayAdapter);
-			speedSpinner.setSelection(selectedType);
-
+			
 			// fill the editText fields
 			descET.setText(description);
 			macET.setText(mac);
 			mtuET.setText(mtu);
 			mssET.setText(mss);
+
+			// TODO currently not used but will be once we scrape for them
+			CheckBox privNet = (CheckBox) findViewById(R.id.blockPrivateNetworks);
+			CheckBox bogonNet = (CheckBox) findViewById(R.id.blockBogonNetworks);
+
+			// bind to the ArrayList for the type spinner
+			ArrayAdapter<String> typeArrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, typeStore);
+			typeArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+			typeSpinner.setAdapter(typeArrayAdapter);
+			typeSpinner.setSelection(selectedType);
+			
+			// bind to the ArrayList for the speed spinner
+			ArrayAdapter<String> speedArrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, speedStore);
+			speedArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+			speedSpinner.setAdapter(speedArrayAdapter);
+			speedSpinner.setSelection(selectedType);
 
 			// bind to the ArrayList (needs a toString method in the SectorList class)
 			ArrayAdapter<String> spinnerSpeedArrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, speedStore);
@@ -108,24 +107,22 @@ public class InterfacesActivity extends CustomActivity
 			speedSpinner.setAdapter(spinnerSpeedArrayAdapter);
 			speedSpinner.setSelection(selectedSpeed);
 
-			// TODO
-			// remove toast messages
-			// fill out if else statement 
-
-			// display nothing if "None" was selected
+			// If "None" is selected do nothing
 			//if(typeSpinner.getSelectedItem().toString().equals("None"))
 
 			if(typeSpinner.getSelectedItem().toString().trim().equals("Static"))
 			{
-				Toast.makeText(getApplicationContext(), "Static", Toast.LENGTH_SHORT).show();
-				
+				// display Static configuration interface options
 				LinearLayout staticLayout = (LinearLayout) findViewById(R.id.staticLayout);
-				staticLayout.setVisibility(View.VISIBLE);	
+				staticLayout.setVisibility(View.VISIBLE);
+				
+				// TODO populate with scraped details
+				EditText staticIp = (EditText) findViewById(R.id.staticIp);
+				Spinner staticGateway = (Spinner) findViewById(R.id.staticGateway);
 			}
 			else if(typeSpinner.getSelectedItem().toString().equals("DHCP"))
 			{
-				Toast.makeText(getApplicationContext(), "DHCP", Toast.LENGTH_SHORT).show();
-
+				// display DHCP configuration interface options
 				LinearLayout dhcpConfLayout = (LinearLayout) findViewById(R.id.dhcpConfLayout);
 				dhcpConfLayout.setVisibility(View.VISIBLE);
 				
@@ -136,11 +133,22 @@ public class InterfacesActivity extends CustomActivity
 			}
 			// TODO PPP
 			else if(typeSpinner.getSelectedItem().toString().equals("PPP"))
-				Toast.makeText(getApplicationContext(), "PPP", Toast.LENGTH_SHORT).show();
+			{
+				// display PPP configuration interface options
+				LinearLayout pppConfLayout = (LinearLayout) findViewById(R.id.pppConfLayout);
+				pppConfLayout.setVisibility(View.VISIBLE);
+				
+				// TODO populate with scraped details
+				Spinner pppServiceProvider = (Spinner) findViewById(R.id.pppServiceProviderSpinner);
+				EditText pppUsername = (EditText) findViewById(R.id.pppUsername);
+				EditText pppPassword = (EditText) findViewById(R.id.pppPassword);
+				EditText pppPhoneNo = (EditText) findViewById(R.id.pppPhoneNo);
+				CheckBox pppAccessPoint = (CheckBox) findViewById(R.id.pppAccessPoint);
+				Spinner pppModemPortSpinner = (Spinner) findViewById(R.id.pppModemPortSpinner);
+			}
 			else if(typeSpinner.getSelectedItem().toString().equals("PPPoE"))
 			{
-				Toast.makeText(getApplicationContext(), "PPPoE", Toast.LENGTH_SHORT).show();
-				
+				// display PPPoE configuration interface options
 				LinearLayout pppoeConfLayout = (LinearLayout) findViewById(R.id.pppoeConfLayout);
 				pppoeConfLayout.setVisibility(View.VISIBLE);
 
@@ -155,8 +163,7 @@ public class InterfacesActivity extends CustomActivity
 			}
 			else if( (typeSpinner.getSelectedItem().toString().equals("PPTP")) || (typeSpinner.getSelectedItem().toString().equals("L2TP"))) 
 			{
-				Toast.makeText(getApplicationContext(), "PPTP or L2TP", Toast.LENGTH_SHORT).show();
-
+				// display PPTP/L2TP configuration interface options
 				LinearLayout pptpConfLayout = (LinearLayout) findViewById(R.id.pptpConfLayout);
 				pptpConfLayout.setVisibility(View.VISIBLE);
 
@@ -171,11 +178,9 @@ public class InterfacesActivity extends CustomActivity
 				Button pptpButton = (Button) findViewById(R.id.pptpAadvancedBtn);
 			}
 
-
 		}
 		else
 			interf.setChecked(false); // if interface is disabled untick the checkbox
-
 
 	}
 
