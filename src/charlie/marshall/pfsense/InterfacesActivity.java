@@ -131,7 +131,6 @@ public class InterfacesActivity extends CustomActivity
 				EditText dhcpIp = (EditText) findViewById(R.id.dhcpIp);
 				Spinner dhcpSubnet = (Spinner) findViewById(R.id.dhcpSubnet);
 			}
-			// TODO PPP
 			else if(typeSpinner.getSelectedItem().toString().equals("PPP"))
 			{
 				// display PPP configuration interface options
