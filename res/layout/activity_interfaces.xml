@@ -114,17 +114,16 @@
         android:text="Block bogon networks"
         android:visibility="gone" />
 
-    <!-- Additional fields for a Static IP conf -->
+    <!-- Additional fields for a Static IP / DDHCP conf -->
 
     <LinearLayout
-        android:id="@+id/linear"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:weightSum="6" >
 
         <TextView
-            android:id="@+id/staticIpLabel"
+            android:id="@+id/IpLabel"
             android:layout_width="0px"
             android:layout_height="wrap_content"
             android:layout_weight="2"
@@ -132,25 +131,50 @@
             android:visibility="gone" />
 
         <EditText
-            android:id="@+id/staticIp"
+            android:id="@+id/Ip"
             android:layout_width="0px"
             android:layout_height="wrap_content"
             android:layout_weight="3"
             android:visibility="gone" />
 
         <Spinner
-            android:id="@+id/staticSubnet"
+            android:id="@+id/Subnet"
             android:layout_width="0px"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:visibility="gone" />
     </LinearLayout>
-    
+
     <Button
         android:id="@+id/save"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:onClick="onClick"
         android:text="Save" />
+
+    <!-- Additional fields for a DDHCP conf -->
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:weightSum="2" >
+
+        <TextView
+            android:id="@+id/hostNameLabel"
+            android:layout_width="0px"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Hostname"
+            android:visibility="gone" />
+
+        <EditText
+            android:id="@+id/hostName"
+            android:layout_width="0px"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:visibility="gone" />
+
+    </LinearLayout>
 
 </LinearLayout>

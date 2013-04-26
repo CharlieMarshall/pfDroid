@@ -124,6 +124,7 @@ public class InterfacesActivity extends CustomActivity
 			speedSpinner.setSelection(selectedSpeed);
 
 			// TODO
+			// remove toast messages
 			// fill out if else statement 
 			
 			// display nothing if "None" was selected
@@ -133,16 +134,27 @@ public class InterfacesActivity extends CustomActivity
 			{
 				Toast.makeText(getApplicationContext(), "Static", Toast.LENGTH_SHORT).show();
 
-				TextView staticIpLabel = (TextView) findViewById(R.id.staticIpLabel);
-				EditText staticIp = (EditText) findViewById(R.id.staticIp);
-				Spinner staticSubnet = (Spinner) findViewById(R.id.staticSubnet);
+				TextView staticIpLabel = (TextView) findViewById(R.id.IpLabel);
+				EditText staticIp = (EditText) findViewById(R.id.Ip);
+				Spinner staticSubnet = (Spinner) findViewById(R.id.Subnet);
 
 				staticIpLabel.setVisibility(View.VISIBLE);
 				staticIp.setVisibility(View.VISIBLE);
 				staticSubnet.setVisibility(View.VISIBLE);
 			}
 			else if(typeSpinner.getSelectedItem().toString().equals("DHCP"))
+			{
 				Toast.makeText(getApplicationContext(), "DHCP", Toast.LENGTH_SHORT).show();
+				
+				TextView dhcpIpLabel = (TextView) findViewById(R.id.IpLabel);
+				EditText dhcpIp = (EditText) findViewById(R.id.Ip);
+				Spinner dhcpSubnet = (Spinner) findViewById(R.id.Subnet);
+
+				dhcpIpLabel.setText("Alias IP address");
+				dhcpIpLabel.setVisibility(View.VISIBLE);
+				dhcpIp.setVisibility(View.VISIBLE);
+				dhcpSubnet.setVisibility(View.VISIBLE);
+			}
 			else if(typeSpinner.getSelectedItem().toString().equals("PPP"))
 				Toast.makeText(getApplicationContext(), "PPP", Toast.LENGTH_SHORT).show();
 			else if(typeSpinner.getSelectedItem().toString().equals("PPPoE"))
