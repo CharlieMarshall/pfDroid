@@ -54,12 +54,12 @@ public class ServicesActivity extends CustomActivity
 	{
 		// Find the ListView resource.     
 		ListView listView = (ListView) findViewById( R.id.mainListView ); 
-		ArrayAdapter<Services> listAdapter = new ArrayAdapter<Services>(this, android.R.layout.simple_list_item_1, servicesStore);
+		//ArrayAdapter<Services> listAdapter = new ArrayAdapter<Services>(this, android.R.layout.simple_list_item_1, servicesStore);
 
 		listView.setTextFilterEnabled(true);
 		registerForContextMenu(listView); // this line is needed for click listeners
-		listView.setAdapter( listAdapter );    
-
+		//listView.setAdapter( listAdapter );    
+		listView.setAdapter(new ServicesArrayAdapter(this, servicesStore ) ) ;
 		listView.setOnItemClickListener(new OnItemClickListener() {
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 				
