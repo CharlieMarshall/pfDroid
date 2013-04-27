@@ -9,40 +9,35 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
+import android.app.ListActivity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 
-// TODO check MAC addresses are correctly formatted
-// TODO check descriptions are not empty - we cant have an empty client
-
-public class ServicesActivity extends CustomActivity
+public class ServicesActivity extends ListActivity
 {
 	private Pfsense pf;
 	private SubDrop sd;
 	private int menu, subDrop;
-
+	private String TAG = "pfsense_app";
 	private ArrayList<Services> servicesStore;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_services);
 
 		// get data from intent
 		Intent i = getIntent();
 		pf = (Pfsense)i.getSerializableExtra("pf");
 		menu = i.getIntExtra("menu", 0);
-		subDrop = i.getIntExtra("subDrop", 0);
-
 		sd = pf.getSubDrops(menu);
+		
+		subDrop = i.getIntExtra("subDrop", 0);
 		new PfGet().execute(sd.getURL(subDrop));
 	}
 
@@ -52,40 +47,29 @@ public class ServicesActivity extends CustomActivity
 
 	public void drawList()
 	{
-		// Find the ListView resource.     
-		ListView listView = (ListView) findViewById( R.id.mainListView ); 
-		//ArrayAdapter<Services> listAdapter = new ArrayAdapter<Services>(this, android.R.layout.simple_list_item_1, servicesStore);
-
+		setListAdapter(new ServicesArrayAdapter(this, servicesStore ) ) ;
+		ListView listView = getListView();
 		listView.setTextFilterEnabled(true);
-		registerForContextMenu(listView); // this line is needed for click listeners
-		//listView.setAdapter( listAdapter );    
-		listView.setAdapter(new ServicesArrayAdapter(this, servicesStore ) ) ;
-		listView.setOnItemClickListener(new OnItemClickListener() {
-			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-				
-				/*
-				 * On click of an item open a new activiy - serviceActivity
-				 * Pass this activity the service - s
-				 * 
-				 * Also pass it various stuff this activity needs
-				 * as when its finished it loads this activity
-				 * 
-				 * TODO startActvityForResult this was be more efficient
-				 */
-				
-				Services s = servicesStore.get(position);
-			
-				Intent i = new Intent(ServicesActivity.this, ViewServiceActivity.class);
-				// Now add the parameters to the Intent
-				i.putExtra("subDrop", subDrop);
-				i.putExtra("menu", menu);
-				i.putExtra("pf", pf);
-				i.putExtra("s", s);
-				startActivity(i);
-				
-				finish();
-			}
-		});
+	}
+	
+	/*
+	 * OnClick methods for the start, stop buttons 
+	 */
+
+	public void onClick(View view)
+	{	
+		final int position = getListView().getPositionForView((RelativeLayout)view.getParent());
+		Services s = servicesStore.get(position);;
+		
+		switch (view.getId()) 
+		{
+		case R.id.startService:		
+			new PfGet().execute(sd.getURL(subDrop) + "/" + s.getStart());
+			break;
+		case R.id.stopService:
+			new PfGet().execute(sd.getURL(subDrop) + "/"  + s.getStop());
+			break;
+		}
 	}
 
 	/*
@@ -102,7 +86,7 @@ public class ServicesActivity extends CustomActivity
 		protected void onPreExecute() {
 			try {
 				dialogT = new ProgressDialog(ServicesActivity.this);
-				dialogT.setMessage("Retrieving services...");
+				dialogT.setMessage("Performing task...");
 				dialogT.setIndeterminate(true);
 				dialogT.setCancelable(false);
 				dialogT.show();
@@ -139,14 +123,12 @@ public class ServicesActivity extends CustomActivity
 			return "error";
 		}
 
-
 		@Override
 		protected void onPostExecute(String result) {
 			drawList();
 			dialogT.dismiss();
 		}
-
-
+		
 	} // end of PfGet subclass
 
 
@@ -157,7 +139,6 @@ public class ServicesActivity extends CustomActivity
 	 * 
 	 */
 
-
 	public void scrapePage(String page) throws IOException{
 		Services service = null;
 		
@@ -165,7 +146,7 @@ public class ServicesActivity extends CustomActivity
 		
 		servicesStore = new ArrayList<Services>();
 
-		Elements tableRow = doc.select("tr");
+		Elements tableRow = doc.select("table[class=tabcont sortable] tr");
 		for (int i=1; i<tableRow.size(); i++) // i = 1 as the first tr contains the headings
 		{
 			Element e = tableRow.get(i);
@@ -213,7 +194,6 @@ public class ServicesActivity extends CustomActivity
 				service.setStart(links.get(0).attr("href"));
 				service.setStop(links.get(1).attr("href"));
 			}
-			
 		servicesStore.add(service);
 		}
 	}
