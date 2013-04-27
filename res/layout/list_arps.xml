@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent" >
+
+    <TextView
+        android:id="@+id/arpIp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true" >
+    </TextView>
+
+    <TextView
+        android:id="@+id/arpMac"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/arpIp" >
+    </TextView>
+
+    <TextView
+        android:id="@+id/arpHostName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_toLeftOf="@+id/arpIp" >
+    </TextView>
+
+    <TextView
+        android:id="@+id/arpInterface"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/arpIp"
+        android:layout_toLeftOf="@+id/arpMac" >
+    </TextView>
+
+</RelativeLayout>

@@ -15,10 +15,6 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 public class ArpActivity extends ListActivity
@@ -26,15 +22,12 @@ public class ArpActivity extends ListActivity
 	private Pfsense pf;
 	private SubDrop sd;
 	private int menu, subDrop;
-
 	private ArrayList<Arp> arpStore;
-	
 	private String TAG = "pfsense_app";
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		//setContentView(R.layout.activity_wol);
 
 		// get data from intent
 		Intent i = getIntent();
@@ -43,8 +36,6 @@ public class ArpActivity extends ListActivity
 		subDrop = i.getIntExtra("subDrop", 0);
 
 		sd = pf.getSubDrops(menu);
-
-		// scrape the page for clients
 		new PfArp().execute(sd.getURL(subDrop));		
 	}
 
@@ -55,22 +46,9 @@ public class ArpActivity extends ListActivity
 
 	public void drawList()
 	{
-		setListAdapter(new ArrayAdapter<Arp>(this, R.layout.activity_index, arpStore));
-		 
+		setListAdapter(new ArpArrayAdapter(this, arpStore)) ;
 		ListView listView = getListView();
 		listView.setTextFilterEnabled(true);
- 
-		listView.setOnItemClickListener(new OnItemClickListener() {
-			public void onItemClick(AdapterView<?> parent, View view,
-					int position, long id) {
-			    
-				Arp arp = arpStore.get(position);
-				
-				Intent i = new Intent(ArpActivity.this, ViewArpActivity.class);
-				i.putExtra("arp", arp);
-				startActivity(i);
-			}
-		});
 	}
 
 	/*
