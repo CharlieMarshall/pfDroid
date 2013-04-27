@@ -28,7 +28,8 @@ public class ServicesActivity extends ListActivity
 	private ArrayList<Services> servicesStore;
 
 	@Override
-	protected void onCreate(Bundle savedInstanceState) {
+	protected void onCreate(Bundle savedInstanceState)
+	{
 		super.onCreate(savedInstanceState);
 
 		// get data from intent
@@ -47,7 +48,7 @@ public class ServicesActivity extends ListActivity
 
 	public void drawList()
 	{
-		setListAdapter(new ServicesArrayAdapter(this, servicesStore ) ) ;
+		setListAdapter(new ServicesArrayAdapter(this, servicesStore)) ;
 		ListView listView = getListView();
 		listView.setTextFilterEnabled(true);
 	}
@@ -78,27 +79,34 @@ public class ServicesActivity extends ListActivity
 	 * Gets the services page
 	 */
 
-	class PfGet extends AsyncTask<String, Void, String> {
+	class PfGet extends AsyncTask<String, Void, String>
+	{
 
 		ProgressDialog dialogT;
 
 		@Override
-		protected void onPreExecute() {
-			try {
+		protected void onPreExecute()
+		{
+			try 
+			{
 				dialogT = new ProgressDialog(ServicesActivity.this);
 				dialogT.setMessage("Performing task...");
 				dialogT.setIndeterminate(true);
 				dialogT.setCancelable(false);
 				dialogT.show();
-			} catch (Exception e) {
+			}
+			catch (Exception e)
+			{
 				Log.d(TAG, "ASYNC task exception, onPreExecute: " + e);
 			}
 		}
 
 		@Override
-		protected String doInBackground(String... args) {
+		protected String doInBackground(String... args)
+		{
 
-			try {
+			try
+			{
 				
 				String page = ""; 
 				
@@ -116,7 +124,8 @@ public class ServicesActivity extends ListActivity
 				scrapePage(page);
 				return "";
 
-			} catch (Exception e) {
+			} catch (Exception e)
+			{
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			} 
@@ -124,7 +133,8 @@ public class ServicesActivity extends ListActivity
 		}
 
 		@Override
-		protected void onPostExecute(String result) {
+		protected void onPostExecute(String result)
+		{
 			drawList();
 			dialogT.dismiss();
 		}
@@ -139,7 +149,8 @@ public class ServicesActivity extends ListActivity
 	 * 
 	 */
 
-	public void scrapePage(String page) throws IOException{
+	public void scrapePage(String page) throws IOException
+	{
 		Services service = null;
 		
 		Document doc = Jsoup.parse(page, "ISO-8859-1");
