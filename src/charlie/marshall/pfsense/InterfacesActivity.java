@@ -46,9 +46,9 @@ public class InterfacesActivity extends CustomActivity
 		Intent i = getIntent();
 		pf = (Pfsense)i.getSerializableExtra("pf");
 		menu = i.getIntExtra("menu", 0);
-		subDrop = i.getIntExtra("subDrop", 0);
-
+		subDrop = i.getIntExtra("subDrop", 0);		
 		sd = pf.getSubDrops(menu);
+		setTitle(sd.getTitle(subDrop));
 		new PfFetch().execute(sd.getURL(subDrop));
 	}
 
