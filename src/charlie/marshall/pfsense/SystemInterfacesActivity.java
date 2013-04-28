@@ -2,34 +2,35 @@ package charlie.marshall.pfsense;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
+import android.app.ListActivity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.TextView;
+import android.widget.RelativeLayout;
 
-public class SystemInterfacesActivity extends CustomActivity
+public class SystemInterfacesActivity extends ListActivity
 {
 	private Pfsense pf;
-	SubDrop sd;
-	int menu, subDrop;
+	private SubDrop sd;
+	private int menu, subDrop;
 
-	String[] inter;
+	private ArrayList<InterfaceStatusInfo> interfaces;
+	private String TAG = "pfsense_app";
 
 	@Override
-	protected void onCreate(Bundle savedInstanceState) {
+	protected void onCreate(Bundle savedInstanceState)
+	{
 		super.onCreate(savedInstanceState);
 
 		// get data from intent
@@ -38,38 +39,57 @@ public class SystemInterfacesActivity extends CustomActivity
 		menu = i.getIntExtra("menu", 0);
 		subDrop = i.getIntExtra("subDrop", 0);
 
-		setContentView(R.layout.activity_status_interfaces);
-
 		sd = pf.getSubDrops(menu);
 
-		// scrape the page for the interfaces names and data
 		new PfScrape().execute(sd.getURL(subDrop));
 
 	}
 
+	/*
+	 * Method to populate and draw the ListView
+	 */
+
 	public void drawList()
 	{
-		// Find the ListView resource.     
-		ListView listView = (ListView) findViewById( R.id.mainListView ); 
-		ArrayAdapter<String> listAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, inter);
-
+		Log.d(TAG, "size of interfacse: " + interfaces.size());
+		setListAdapter(new InterfaceStatusArrayAdapter(this, interfaces)) ;
+		ListView listView = getListView();
 		listView.setTextFilterEnabled(true);
-		registerForContextMenu(listView); // this line is needed for click listeners
-		listView.setAdapter( listAdapter );    
-
-		listView.setOnItemClickListener(new OnItemClickListener() {
-			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-				// currently does nothing
-			}
-		});
 	}
 
-	public void setText(String text)
+	/*
+	 * OnClick methods for the disconnect/connect & info buttons 
+	 */
+
+	public void onClick(View view)
+	{	
+		final int position = getListView().getPositionForView((RelativeLayout)view.getParent());
+		InterfaceStatusInfo t = interfaces.get(position);;
+
+		Log.d(TAG, "position:" + position);
+
+		switch (view.getId()) 
+		{
+		case R.id.interfaceInfoBtn:
+			Log.d(TAG, "INFO");
+			viewInfo(t);
+			break;
+		case R.id.interfaceStatusBtn:
+			Log.d(TAG, "connect/diconnect");
+			Log.d(TAG, "link: " + t.getLink());
+
+			// TODO confirm working then uncomment
+			//new PfGet().execute(sd.getURL(subDrop) + "/"  + t.getLink());
+			break;
+		}
+	}
+
+	public void viewInfo(InterfaceStatusInfo interfaceInfo)
 	{
-		TextView textView = (TextView) findViewById(R.id.textView);
-		textView.setText(text);
+		Intent i = new Intent(SystemInterfacesActivity.this, ViewInterfaceStatusActivity.class);
+		i.putExtra("interface" , interfaceInfo);
+		startActivity(i);
 	}
-
 
 	/*
 	 * Subclass for ASYNC task
@@ -85,7 +105,7 @@ public class SystemInterfacesActivity extends CustomActivity
 		protected void onPreExecute() {
 			try {
 				dialogT = new ProgressDialog(SystemInterfacesActivity.this);
-				dialogT.setMessage("Scraping page...");
+				dialogT.setMessage("Retrieving page...");
 				dialogT.setIndeterminate(true);
 				dialogT.setCancelable(false);
 				dialogT.show();
@@ -100,7 +120,7 @@ public class SystemInterfacesActivity extends CustomActivity
 			try {
 
 				String page = "";
-				
+
 				if (pf.getProtocol().equals("HTTP"))
 				{
 					HttpMethods methods = new HttpMethods(pf.getHttpCookieStore());
@@ -112,9 +132,9 @@ public class SystemInterfacesActivity extends CustomActivity
 					page = methods.getPfPage(new URL(pf.getPfURL() + args[0]));
 				}
 
-				// TODO move inter so its not global
-				inter = scrapeWol(page);
+				scrapePage(page);
 
+				// TODO make this method void
 				return "";
 
 			} catch (Exception e) {
@@ -132,68 +152,129 @@ public class SystemInterfacesActivity extends CustomActivity
 		}
 
 
-	} // end of PfPower subclass
+	} // end of PfScrape subclass
+
 
 	/*
-	 * Method to scrape the wol page
+	 * Method to scrape the status interfaces page
 	 * 
-	 * Saves wol clients into an ArrayList wolStore
-	 * Saves interfaces into an ArrayList interfaceStore
-	 * 
-	 * We save interfaces so we can find the interfaces names eg opt1 from an alias name eg wifi
-	 * 
+	 * TODO NEED TO DEFINE METHOD HERE
 	 */
 
+	public void scrapePage(String page) throws IOException{
 
-	public String[] scrapeWol(String page) throws IOException{
+		interfaces = new ArrayList<InterfaceStatusInfo>();
+		InterfaceStatusInfo interfaceInfo = null;
+		InterfaceStatus interStatus = new InterfaceStatus(); 
 
 		Document doc = Jsoup.parse(page, "ISO-8859-1");
 
-		// get interface titles
 		Elements table = doc.select("table");
 
-		Elements noRows = doc.select("td.listtopic");
-		Log.d(TAG, "no of topics: " + noRows.size());
-
-		String[] topics = new String[noRows.size()];
-		int i =0;
+		int interfaceCount = 0;
+		String value = "";
+		boolean statusTag = false;
+		boolean typeTag = false;
 
 		Elements e = table.select("td");
 		for (Element y : e)
 		{
-			if(y.hasClass("listtopic"))
+
+			if(y.hasClass("listtopic")) // interface name / signifies start of a interface
+			{
+				if(interfaceCount!=0) // add last interface scraped to the arrayList
+					interfaces.add(interfaceInfo);
+
+				interfaceInfo = new InterfaceStatusInfo(y.text()); // constructor with interface name as parameter
+				interfaceCount++;
+			}
+			else if(y.hasClass("vncellt")) // this is a heading
+			{
+				statusTag = false;
+				typeTag = false;
+				
+				if(y.text().equals("Status"))
+					statusTag = true;
+				else if( (y.text().equals("PPPoE")) || (y.text().equals("PPTP")) || (y.text().equals("L2TP")) || (y.text().equals("PPP")) )
+				{
+					typeTag = true;
+					interfaceInfo.setInterfaceType(true, y.text());
+				}
+				interStatus = new InterfaceStatus(); 
+				interStatus.setHeading(y.text());
+			}
+			else if(y.hasClass("listr")) // this is a value
 			{
 
-				Log.d(TAG, "int i: " + i);
-				topics[i] = y.text();
-				Log.d(TAG, "TOPIC: " + y.text());
-				i++;
-			}
-			else if(y.hasClass("vncellt"))
-			{
-				Log.d(TAG, "HEADING: " + y.text());
-			}
-			else if(y.hasClass("listr"))
-			{
-				// normally childNodeSize is 1, will be 3 if its down
-				if(y.childNodeSize()>1)
+				if((statusTag == true))
 				{
-					if(y.text().replace("\u00a0","").equals("up"))
-					{
-						//  TODO set button text as Connect
-						Log.d(TAG, "NODE IS UP");
-					}
-					else if(y.text().replace("\u00a0","").equals("down"))
-					{
-						//  TODO set button text as Disconnect
-						Log.d(TAG, "NODE IS DOWN");
-					}
-					Log.d(TAG, "ACTION for button:" + y.select("a").attr("href").toString());
+					if(y.text().equals("up"))
+						interfaceInfo.setStatus(true);
+					
+					value = y.text();
+					interfaceInfo.setStatusStr(y.text());
 				}
-				Log.d(TAG, "VALUE: " + y.text());
+
+				else if(typeTag == true)
+				{
+					interfaceInfo.setInterfaceTypeValue(y.text());
+
+					if(y.childNodeSize()>1)
+					{
+						if(y.child(0).hasAttr("href"))
+						{
+							interfaceInfo.setLink(y.child(0).attr("href"));
+							value = y.text().replace("\u00a0","");
+							interfaceInfo.setInterfaceTypeValue(value);
+						}
+						else // handles ISP DNS servers (<br>) 
+							value = y.text();
+					}
+				}
+				else
+					value = y.text();
+				
+				interStatus.setValue(value);
+				interfaceInfo.addInterface(interStatus);
+
 			}
 		}
-		return topics;
+		interfaces.add(interfaceInfo);
+
+		// DEBUGGING DELETE BELOW WHEN HAPPY
+
+		/*
+		for (int z=0; z<interfaces.size(); z++)
+		{
+			Log.d(TAG, "print : " + z);
+			InterfaceStatusInfo w = interfaces.get(z);
+			w.printTest();
+		}
+
+		Log.d(TAG, "----------------------");
+		for (int z=0; z<interfaces.size(); z++)
+		{
+			InterfaceStatusInfo w = interfaces.get(z);
+
+			Log.d(TAG, "INTERFACE: " + w.getHeader());
+
+			if(w.getStatus()==true)
+				Log.d(TAG, "Status: UP");
+			else
+				Log.d(TAG, "Status: DOWN");
+
+			if(w.hasButton==true)
+			{
+				Log.d(TAG, "HAS A BUTTON");
+				Log.d(TAG, "link: " + w.getLink());
+			}
+			if(w.hasType==true)
+			{
+				Log.d(TAG, "type: " + w.getType());
+				Log.d(TAG, "type value: " + w.getTypeValue());
+			}	
+		} // end of debugging
+		 */
 	}
 
 }

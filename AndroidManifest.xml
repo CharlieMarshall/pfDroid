@@ -94,6 +94,9 @@
         <activity
             android:name="charlie.marshall.pfsense.TablesActivity"
             android:label="Tables" />
+        <activity
+            android:name="charlie.marshall.pfsense.ViewInterfaceStatusActivity"
+            android:label="Tables" />
         
     </application>
 
