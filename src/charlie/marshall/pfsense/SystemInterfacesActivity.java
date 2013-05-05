@@ -79,7 +79,7 @@ public class SystemInterfacesActivity extends ListActivity
 			Log.d(TAG, "link: " + t.getLink());
 
 			// TODO confirm working then uncomment
-			//new PfGet().execute(sd.getURL(subDrop) + "/"  + t.getLink());
+			new PfScrape().execute(sd.getURL(subDrop) + "/"  + t.getLink());
 			break;
 		}
 	}
